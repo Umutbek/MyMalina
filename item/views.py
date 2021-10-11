@@ -151,9 +151,8 @@ class RemoveItem(APIView):
                 elif item == i.item.id and i.quantity == 1:
                     if usercart.listitem.count() == 1:
                         usercart.delete()
-                        i.delete()
                         break
-                    i.item.delete()
+                    i.delete()
 
             return Response({"detail": "Removed successfully"})
         else:
