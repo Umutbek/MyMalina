@@ -321,6 +321,7 @@ class SavePaymentAction(models.Model):
 class Report(models.Model):
     """Model for order report"""
     total = models.IntegerField(default=0)
+    test = models.IntegerField(default=0)
 
 
 def save_action(store, order, prev_status, status, changedby, user):
