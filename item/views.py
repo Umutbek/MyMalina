@@ -22,6 +22,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django_filters import FilterSet
 from django_filters import rest_framework as filters
 from django.db.models import Sum, Count, F, Q
+from django.http import Http404
 
 
 class ItemCategoryViewSet(viewsets.ModelViewSet):
