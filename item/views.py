@@ -190,12 +190,10 @@ class DeleteCartsView(APIView):
         serializer = serializers.DeleteCartSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         client = serializer.validated_data['client']
-
         usercart = models.ModelCart.objects.filter(clientid=client, visibility=True)
         if usercart:
             for i in usercart:
                 i.delete()
-
             return Response({"detail": "Cart deleted successfully"})
         else:
             return Response({"detail": "User cart doesn't exist"}, status=404)
@@ -205,7 +203,6 @@ class ClientOrderViewSet(viewsets.ModelViewSet):
     """Manage clientorder"""
     serializer_class = serializers.ClientOrderSerializer
     queryset = models.ModelOrder.objects.all().order_by('-id')
-
     filter_backends = (DjangoFilterBackend, SearchFilter, OrderingFilter)
     filter_class = filter.OrderFilter
 
@@ -213,14 +210,12 @@ class ClientOrderViewSet(viewsets.ModelViewSet):
         order = self.queryset.all().order_by('-id').annotate(
             is_rated=Count("reviews",filter=Q(reviews__user=self.request.user.id))
         )
-
         return order
 
     def get_serializer_class(self):
         if self.action == 'list' or self.action == 'retrieve':
             return serializers.GetClientOrderSerializer
         return serializers.ClientOrderSerializer
-
 
     def create(self, request, *args, **kwargs):
         serializer = serializers.ClientOrderSerializer(data=request.data)
@@ -258,7 +253,6 @@ class StatusUpdateView(generics.RetrieveUpdateAPIView):
         serializer = self.get_serializer(self.object, data=request.data, partial=True)
         if serializer.is_valid():
             saved_data = serializer.save()
-
             functions.update_status(self.object, prev_status, self.request.user.name)
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -300,7 +294,6 @@ class OrderReportView(generics.ListAPIView):
         date_from = request.query_params.get('date_from')
         date_to = request.query_params.get('date_to')
         storeId = request.query_params.get('storeId')
-
         report = models.ModelOrder.objects.all()
         total = sum(i.cart.totalprice for i in report)
 
@@ -327,7 +320,6 @@ class OrderReportView(generics.ListAPIView):
 
         serializer = serializers.ClientOrderSerializer(report, many=True)
         reportserializer = serializers.ReportSerializer(totalcost)
-
         return Response(reportserializer.data)
 
 
@@ -335,8 +327,6 @@ class OrderActionView(generics.ListAPIView):
     """List of order actions"""
     serializer_class = serializers.OrderActionSerializer
     queryset = models.SaveOrderActions.objects.all().order_by('-id')
-    # filter_backends = (DjangoFilterBackend, SearchFilter, OrderingFilter)
-    # filter_class = filter.ActionFilter
 
     def list(self, request, *args, **kwargs):
 
@@ -348,12 +338,10 @@ class OrderActionView(generics.ListAPIView):
             serializer = self.get_serializer(action, many=True)
             return Response(serializer.data)
 
-
         page = self.paginate_queryset(action)
         if page:
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
-
 
         serializer = self.get_serializer(action, many=True)
         return Response(serializer.data)
@@ -379,7 +367,6 @@ class PaymentActionView(generics.ListAPIView):
         if page:
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
-
 
         serializer = self.get_serializer(action, many=True)
         return Response(serializer.data)
