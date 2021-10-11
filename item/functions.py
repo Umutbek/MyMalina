@@ -164,4 +164,5 @@ def update_status(saved_data, prev_status, currentuser):
             models.save_action(saved_data.storeId, saved_data, prev_status, saved_data.status, 'Курьер', saved_data.clientId)
         else:
             models.save_action(saved_data.storeId, saved_data, prev_status, saved_data.status, currentuser, saved_data.clientId)
+
 #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
