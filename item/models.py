@@ -343,12 +343,34 @@ def save_score_action(user, store, order,scoregot,scorepaid):
         score_action = ScoreActions(user=user, store=store, order=order, scorepaid=scorepaid)
         score_action.save()
 
+#
+# def send_notification(device_id, title, body):
+#     fcm = FCMNotification(api_key="AAAAZb7jhUg:APA91bHYanYczet9wNojIbQbIwp3dgxl2SI69jZF5hLhFuQ1ii2Cy0v1ZbkjkBc8khNg0KGVvy82lP4pZj8tnta3T1kF5DUI6SouzQCYiNCJILOuEiZjbOnuy3jLMuu2Jb6BkTlakMuZ")
+#     return fcm.notify_single_device(
+#         registration_id=device_id,
+#         message_title=title,
+#         message_body=body
+#     )
 
 def send_notification(device_id, title, body):
     fcm = FCMNotification(api_key="AAAAZb7jhUg:APA91bHYanYczet9wNojIbQbIwp3dgxl2SI69jZF5hLhFuQ1ii2Cy0v1ZbkjkBc8khNg0KGVvy82lP4pZj8tnta3T1kF5DUI6SouzQCYiNCJILOuEiZjbOnuy3jLMuu2Jb6BkTlakMuZ")
+    data_message = {
+        "to": device_id,
+        "mutable_content": True,
+        "content_available": True,
+        "priority": "high",
+        "data": {
+            "content": {
+                "id": 1,
+                "channelKey": "malina",
+                "title": title,
+                "body": body,
+            }
+        }
+    }
+
     return fcm.notify_single_device(
         registration_id=device_id,
-        message_title=title,
-        message_body=body
+        data_message=data_message
     )
 
