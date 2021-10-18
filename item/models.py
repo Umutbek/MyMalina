@@ -85,7 +85,10 @@ class ItemWithQuantity(models.Model):
         return queryset['totaladditiveprice']
 
     def save(self):
-        self.total=self.item.cost * self.quantity
+        if self.item.salecost>0:
+            self.total = self.item.salecost * self.quantity
+        else:
+            self.total=self.item.cost * self.quantity
         super(ItemWithQuantity, self).save()
 
 
