@@ -214,6 +214,7 @@ class GetItemSerializer(serializers.ModelSerializer):
     images = ItemImagesSerializer(many=True, required=False, allow_null=True)
     isfavourite = serializers.BooleanField()
     supplier = MyStore()
+    taketogether = TakeTogetherSerializer(many=True)
 
     class Meta:
         model = models.Item
