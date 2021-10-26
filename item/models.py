@@ -357,23 +357,22 @@ def save_score_action(user, store, order,scoregot,scorepaid):
 
 def send_notification(device_id, title, body):
     fcm = FCMNotification(api_key="AAAArw7Rveo:APA91bFc8uYyBchE_q3c9EfOF5qvZfYT9UJQIBmDI8cwtMED81Mwh9GNBZNKdsu8ySycNuDr4dBSDl_QAQc40T9R-3MhP-zszVYwax3J_ANGhwx55gZEmwKPGdOdlLBmmeJ-fhXmA3_v")
+
     data_message = {
-        "to": device_id,
-        "mutable_content": True,
-        "content_available": True,
-        "priority": "high",
-        "data": {
             "content": {
                 "id": 1,
                 "channelKey": "malina",
                 "title": title,
                 "body": body,
             }
-        }
     }
 
-    return fcm.notify_single_device(
+    a = fcm.notify_single_device(
         registration_id=device_id,
+        message_title=title,
+        message_body=body,
         data_message=data_message
     )
+    print(a)
+    return a
 
