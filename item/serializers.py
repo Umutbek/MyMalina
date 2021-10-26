@@ -378,7 +378,7 @@ class ClientOrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ModelOrder
         fields = (
-            'id', 'clientId', 'storeId', 'paymentType', 'paymentStatus', 'ordertype',
+            'id', 'clientId', 'storeId', 'paymentType', 'paymentStatus', 'ordertype', 'totalprice',
             'timedelivery', 'scorepaid', 'scoregot', 'address', 'declinereason', 'status',
             'quantityappliances', 'scancode', 'comment', 'date', 'cart'
         )

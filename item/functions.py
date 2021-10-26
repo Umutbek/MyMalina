@@ -1,6 +1,6 @@
 from user.models import RegularAccount, Store
 from item import models, firestore
-
+import requests
 
 def create_cart(self,serializer):
 
@@ -164,5 +164,28 @@ def update_status(saved_data, prev_status, currentuser):
             models.save_action(saved_data.storeId, saved_data, prev_status, saved_data.status, 'Курьер', saved_data.clientId)
         else:
             models.save_action(saved_data.storeId, saved_data, prev_status, saved_data.status, currentuser, saved_data.clientId)
+
+
+def paybox_integration(order_id, merchant_id, amount, description, salt, signature):
+
+    try:
+        data = '<?xml version="1.0" encoding="UTF-8"?>'
+        data += '<request>'
+        data += '  <pg_order_id>{0}</pg_order_id>'.format(order_id)
+        data += '  <pg_merchant_id>{0}</pg_merchant_id>'.format(merchant_id)
+        data += '  <pg_amount>{0}</pg_amount>'.format(amount)
+        data += '  <pg_description>{0}</pg_description>'.format(description)
+        data += '  <pg_salt>{0}</pg_salt>'.format(salt)
+        data += '  <pg_sig>{0}</pg_sig>'.format(signature)
+        data += '</request>'
+        headers = {'Content-Type': 'multipart/form-data'}
+
+        r = requests.post('https://api.paybox.money/init_payment.php',
+                      data=data.encode('utf-8'), headers=headers)
+
+        print(r.content.decode(), r.status_code)
+        return (r.content.decode(), r.status_code)
+    except Exception as e:
+        print(e)
 
 #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

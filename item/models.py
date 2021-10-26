@@ -356,7 +356,7 @@ def save_score_action(user, store, order,scoregot,scorepaid):
 #     )
 
 def send_notification(device_id, title, body):
-    fcm = FCMNotification(api_key="AAAAZb7jhUg:APA91bHYanYczet9wNojIbQbIwp3dgxl2SI69jZF5hLhFuQ1ii2Cy0v1ZbkjkBc8khNg0KGVvy82lP4pZj8tnta3T1kF5DUI6SouzQCYiNCJILOuEiZjbOnuy3jLMuu2Jb6BkTlakMuZ")
+    fcm = FCMNotification(api_key="AAAArw7Rveo:APA91bFc8uYyBchE_q3c9EfOF5qvZfYT9UJQIBmDI8cwtMED81Mwh9GNBZNKdsu8ySycNuDr4dBSDl_QAQc40T9R-3MhP-zszVYwax3J_ANGhwx55gZEmwKPGdOdlLBmmeJ-fhXmA3_v")
     data_message = {
         "to": device_id,
         "mutable_content": True,

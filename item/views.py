@@ -222,8 +222,14 @@ class ClientOrderViewSet(viewsets.ModelViewSet):
         serializer = serializers.ClientOrderSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         saved_data = serializer.save()
-        print("Saved data", saved_data.status)
         functions.create_order_in_firebase(saved_data, self.request.user.name)
+        if saved_data.paymentType == 2:
+            merchant_id=541396
+            signature = "Ry7ZDFkfO5QaRvqE"
+            salt = "malina"
+            pay_response = functions.paybox_integration(saved_data.id, merchant_id, saved_data.totalprice,
+                                         saved_data.comment, salt, signature)
+            return Response(pay_response)
         return Response(serializer.data)
 
 
