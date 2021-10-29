@@ -1,6 +1,7 @@
 from django.db import models
 from django_fsm import FSMIntegerField, transition
 from feed import utils
+from user import models as m
 
 
 class Article(models.Model):
@@ -10,6 +11,7 @@ class Article(models.Model):
     text = models.TextField(null=True, )
     date = models.DateTimeField(auto_now_add=True, null=True)
     type = FSMIntegerField(choices=utils.ArticleType.choices)
+    store = models.ForeignKey(m.Store, on_delete=models.CASCADE, null=True)
 
     @property
     def images(self):

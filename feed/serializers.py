@@ -18,7 +18,7 @@ class ArticleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Article
-        fields = ('id', 'title', 'subtitle', 'text', 'images', 'date', 'type')
+        fields = ('id', 'title', 'subtitle', 'text', 'images', 'date', 'type', 'store')
 
 
     def create(self, validated_data):
@@ -54,7 +54,7 @@ class ArticleSerializer(serializers.ModelSerializer):
         instance.title = validated_data.get('title', instance.title)
         instance.subtitle = validated_data.get('subtitle', instance.subtitle)
         instance.text = validated_data.get('text', instance.text)
-
+        instance.store = validated_data.get('store', instance.store)
         instance.save()
 
         # if len(articleimage) == len(saveimage):
@@ -95,6 +95,7 @@ class ArticleSerializer(serializers.ModelSerializer):
                     i.id = a.get('id', i.id)
                     i.link = a.get('link', i.link)
                     i.name = a.get('name', i.name)
+                    i.store = a.get('store', i.store)
                     i.save()
                 else:
                     c = models.ArticleImages.objects.create(article=instance, **a)

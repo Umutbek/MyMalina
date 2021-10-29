@@ -7,7 +7,8 @@ from feed.models import Article
 class ArticleFilter(FilterSet):
     """Article filter by type(sales or news)"""
     type = filters.CharFilter('type')
+    store = filters.CharFilter('store')
 
     class Meta:
         models = Article
-        fields = ('type',)
+        fields = ('type', 'store')
