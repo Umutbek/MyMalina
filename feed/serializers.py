@@ -95,7 +95,6 @@ class ArticleSerializer(serializers.ModelSerializer):
                     i.id = a.get('id', i.id)
                     i.link = a.get('link', i.link)
                     i.name = a.get('name', i.name)
-                    i.store = a.get('store', i.store)
                     i.save()
                 else:
                     c = models.ArticleImages.objects.create(article=instance, **a)
