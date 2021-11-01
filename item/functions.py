@@ -1,6 +1,13 @@
 from user.models import RegularAccount, Store
 from item import models, firestore
+import xml.etree.ElementTree as ET
+import hmac
 import requests
+import hashlib
+from operator import attrgetter
+from app import settings
+from django.utils.crypto import get_random_string
+
 
 def create_cart(self,serializer):
 
@@ -166,26 +173,45 @@ def update_status(saved_data, prev_status, currentuser):
             models.save_action(saved_data.storeId, saved_data, prev_status, saved_data.status, currentuser, saved_data.clientId)
 
 
-def paybox_integration(order_id, merchant_id, amount, description, salt, signature):
+def paybox_integration(order_id, amount, description):
 
-    try:
-        data = '<?xml version="1.0" encoding="UTF-8"?>'
-        data += '<request>'
-        data += '  <pg_order_id>{0}</pg_order_id>'.format(order_id)
-        data += '  <pg_merchant_id>{0}</pg_merchant_id>'.format(merchant_id)
-        data += '  <pg_amount>{0}</pg_amount>'.format(amount)
-        data += '  <pg_description>{0}</pg_description>'.format(description)
-        data += '  <pg_salt>{0}</pg_salt>'.format(salt)
-        data += '  <pg_sig>{0}</pg_sig>'.format(signature)
-        data += '</request>'
-        headers = {'Content-Type': 'multipart/form-data'}
+    def hash_md5(data):
+        return hashlib.md5(data.encode()).hexdigest()
 
-        r = requests.post('https://api.paybox.money/init_payment.php',
-                      data=data.encode('utf-8'), headers=headers)
+    def sort_children_by_name(parent):
+        parent[:] = sorted(parent, key=attrgetter("tag"))
 
-        print(r.content.decode(), r.status_code)
-        return (r.content.decode(), r.status_code)
-    except Exception as e:
-        print(e)
+    root = ET.Element('request')
+
+    merchant_id = ET.SubElement(root, 'pg_merchant_id')
+    merchant_id.text = settings.MERCHANT_ID
+
+    pg_amount = ET.SubElement(root, 'pg_amount')
+    pg_amount.text = str(amount)
+
+    pg_order_id = ET.SubElement(root, 'pg_order_id')
+    pg_order_id.text = str(order_id)
+
+    pg_description = ET.SubElement(root, 'pg_description')
+    pg_description.text = description
+
+    pg_salt = ET.SubElement(root, 'pg_salt')
+    pg_salt.text = get_random_string()
+
+    sort_children_by_name(root)
+
+    data = [node.text for node in root.findall("*")]
+    data = ['init_payment.php'] + data + [settings.PAY_SECRET_KEY]
+
+    pg_sig = ET.SubElement(root, 'pg_sig')
+    pg_sig.text = hash_md5(';'.join(data))
+    # print(ET.dump(root))
+
+    payment_url = 'https://api.paybox.money/init_payment.php'
+    response = requests.post(payment_url, data={'pg_xml': ET.tostring(root, encoding='utf8', method='xml')})
+    response_xml = ET.fromstring(response.content.decode())
+    pg_redirect_url = (response_xml.find('pg_redirect_url').text)
+    print(pg_redirect_url)
+    return pg_redirect_url
 
 #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

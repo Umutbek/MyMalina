@@ -42,6 +42,7 @@ class ItemViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         """Retrieve the favourite stores for the authenticated user only"""
+
         item = self.queryset.all().annotate(
             isfavourite=Count("fav_items",
                                      filter=Q(fav_items__user=self.request.user.id)))
@@ -224,12 +225,9 @@ class ClientOrderViewSet(viewsets.ModelViewSet):
         saved_data = serializer.save()
         functions.create_order_in_firebase(saved_data, self.request.user.name)
         if saved_data.paymentType == 2:
-            merchant_id=541396
-            signature = "Ry7ZDFkfO5QaRvqE"
-            salt = "malina"
-            pay_response = functions.paybox_integration(saved_data.id, merchant_id, saved_data.totalprice,
-                                         saved_data.comment, salt, signature)
-            return Response(pay_response)
+            paybox_response = functions.paybox_integration(saved_data.id, saved_data.totalprice,
+                                         saved_data.comment)
+            return Response({'redirect_url': paybox_response})
         return Response(serializer.data)
 
 
