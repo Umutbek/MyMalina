@@ -193,7 +193,7 @@ class RelateStoreSerializer(UserSerializer):
 
     class Meta:
         model = models.Store
-        fields = ('id', 'name', 'phone', 'email', 'storeaddress', 'worktime', 'telegram', 'deliverycost', 'avgcheck',
+        fields = ('id', 'name', 'phone', 'avatar', 'email', 'storeaddress', 'worktime', 'telegram', 'deliverycost', 'avgcheck',
                   'instagram', 'whatsapp', 'slogan', 'description', 'category', 'isfavouritestore', 'subcategory')
         read_only_field = ('id',)
         depth=1
