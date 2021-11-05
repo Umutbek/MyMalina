@@ -175,11 +175,15 @@ def update_status(saved_data, prev_status, currentuser):
 
 def paybox_integration(order_id, amount, description):
 
+
+    print(description)
+
     def hash_md5(data):
         return hashlib.md5(data.encode()).hexdigest()
 
     def sort_children_by_name(parent):
         parent[:] = sorted(parent, key=attrgetter("tag"))
+
 
     root = ET.Element('request')
 
@@ -210,6 +214,7 @@ def paybox_integration(order_id, amount, description):
     payment_url = 'https://api.paybox.money/init_payment.php'
     response = requests.post(payment_url, data={'pg_xml': ET.tostring(root, encoding='utf8', method='xml')})
     response_xml = ET.fromstring(response.content.decode())
+    print(response_xml)
     pg_redirect_url = (response_xml.find('pg_redirect_url').text)
     print(pg_redirect_url)
     return pg_redirect_url

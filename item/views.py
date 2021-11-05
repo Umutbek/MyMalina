@@ -225,8 +225,13 @@ class ClientOrderViewSet(viewsets.ModelViewSet):
         saved_data = serializer.save()
         functions.create_order_in_firebase(saved_data, self.request.user.name)
         if saved_data.paymentType == 2:
-            paybox_response = functions.paybox_integration(saved_data.id, saved_data.totalprice,
-                                         saved_data.comment)
+            if saved_data.comment:
+                paybox_response = functions.paybox_integration(saved_data.id, saved_data.totalprice,
+                                             saved_data.comment)
+            else:
+                paybox_response = functions.paybox_integration(saved_data.id, saved_data.totalprice,
+                                             'No comment')
+
             return Response({'redirect_url': paybox_response})
         return Response(serializer.data)
 
