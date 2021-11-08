@@ -23,6 +23,8 @@ from django_filters import FilterSet
 from django_filters import rest_framework as filters
 from django.db.models import Sum, Count, F, Q
 from django.http import Http404
+from rest_framework_xml.parsers import XMLParser
+
 
 
 class ItemCategoryViewSet(viewsets.ModelViewSet):
@@ -440,6 +442,38 @@ class DeleteSeveralItemsView(APIView):
                 serializer.errors,
                 status=status.HTTP_400_BAD_REQUEST)
 
+
+class PaymentResult(APIView):
+    """Paybox result"""
+    serializer_class = serializers.PaymentResultSerializer
+    permission_classes = (AllowAny,)
+    parser_classes = [XMLParser]
+
+
+    def post(self, request):
+
+        serializer = serializers.PaymentResultSerializer(data=request.data)
+        if serializer.is_valid():
+            saved_data = serializer.save()
+            if int(saved_data.pg_result)==1:
+                saved_data.status = 'Success'
+                saved_data.save()
+            else:
+                saved_data.status = 'Failed'
+                saved_data.save()
+
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST)
+
+
+class PaymentResultDetail(generics.RetrieveAPIView):
+    """Check order payment status"""
+    serializer_class = serializers.PaymentResultSerializer
+    queryset = models.PaymentItem.objects.all()
+    lookup_field = 'pg_order_id'
 
 
 

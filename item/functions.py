@@ -199,6 +199,11 @@ def paybox_integration(order_id, amount, description):
     pg_description = ET.SubElement(root, 'pg_description')
     pg_description.text = description
 
+    pg_result_url = ET.SubElement(root, 'pg_result_url')
+    pg_result_url.text = f'https://138.68.99.168/myapps/venv/api/item/payment_result/'
+    pg_request_method = ET.SubElement(root, 'pg_request_method')
+    pg_request_method.text = 'POST'
+
     pg_salt = ET.SubElement(root, 'pg_salt')
     pg_salt.text = get_random_string()
 
@@ -214,9 +219,10 @@ def paybox_integration(order_id, amount, description):
     payment_url = 'https://api.paybox.money/init_payment.php'
     response = requests.post(payment_url, data={'pg_xml': ET.tostring(root, encoding='utf8', method='xml')})
     response_xml = ET.fromstring(response.content.decode())
-    print(response_xml)
     pg_redirect_url = (response_xml.find('pg_redirect_url').text)
-    print(pg_redirect_url)
+
+    pg_payment_id = int(response_xml.find('pg_payment_id').text)
+
     return pg_redirect_url
 
 #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

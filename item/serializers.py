@@ -505,3 +505,12 @@ class DeleteSeveralItemsSerializer(serializers.Serializer):
 
     def save(self):
         items = self.validated_data['items']
+
+
+class PaymentResultSerializer(serializers.ModelSerializer):
+    """Paybox result serializer"""
+
+    class Meta:
+        model = models.PaymentItem
+        fields = ('pg_order_id', 'pg_result', 'pg_payment_id', 'pg_amount',
+                  'pg_description', 'pg_salt', 'pg_sig', 'pg_failure_description', 'status')

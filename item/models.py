@@ -321,6 +321,18 @@ class SavePaymentAction(models.Model):
     date = models.DateTimeField(auto_now_add=True, null=True)
 
 
+class PaymentItem(models.Model):
+    pg_order_id = models.CharField(max_length=200, null=True, blank=True)
+    pg_result = models.CharField(max_length=200, null=True, blank=True)
+    pg_payment_id = models.CharField(max_length=200, null=True, blank=True)
+    pg_amount = models.CharField(max_length=200, null=True, blank=True)
+    pg_description = models.CharField(max_length=200, null=True, blank=True)
+    pg_salt = models.CharField(max_length=200, null=True, blank=True)
+    pg_sig = models.CharField(max_length=200, null=True, blank=True)
+    pg_failure_description = models.CharField(max_length=200, null=True, blank=True)
+    status = models.CharField(max_length=200, null=True, blank=True)
+
+
 class Report(models.Model):
     """Model for order report"""
     total = models.IntegerField(default=0)

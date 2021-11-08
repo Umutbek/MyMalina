@@ -30,5 +30,7 @@ urlpatterns = [
     path('taketogether/<int:pk>', views.AddTakeTogetherView.as_view()),
     path('deleteitems', views.DeleteSeveralItemsView.as_view()),
     path('itemshare/<int:pk>', views.ItemShareLinkView.as_view(), name='itemshare'),
-    path('deletecarts', views.DeleteCartsView.as_view())
+    path('deletecarts', views.DeleteCartsView.as_view()),
+    path('payment_result', views.PaymentResult.as_view()),
+    path('payment_result/<str:pg_order_id>', views.PaymentResultDetail.as_view())
 ]
