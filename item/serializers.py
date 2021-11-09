@@ -514,3 +514,11 @@ class PaymentResultSerializer(serializers.ModelSerializer):
         model = models.PaymentItem
         fields = ('pg_order_id', 'pg_result', 'pg_payment_id', 'pg_amount',
                   'pg_description', 'pg_salt', 'pg_sig', 'pg_failure_description', 'status')
+
+
+class GetPaymentResultSerializer(serializers.ModelSerializer):
+    """Paybox result serializer"""
+
+    class Meta:
+        model = models.PaymentItem
+        fields = ('status',)

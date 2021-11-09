@@ -471,7 +471,7 @@ class PaymentResult(APIView):
 
 class PaymentResultDetail(generics.RetrieveAPIView):
     """Check order payment status"""
-    serializer_class = serializers.PaymentResultSerializer
+    serializer_class = serializers.GetPaymentResultSerializer
     queryset = models.PaymentItem.objects.all()
     lookup_field = 'pg_order_id'
 
