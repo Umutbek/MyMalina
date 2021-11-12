@@ -233,8 +233,11 @@ class ClientOrderViewSet(viewsets.ModelViewSet):
             else:
                 paybox_response = functions.paybox_integration(saved_data.id, saved_data.totalprice,
                                              'No comment')
+            return Response({
+                'redirect_url': paybox_response['pg_redirect_url'],
+                'order_id': paybox_response['pg_order_id']
+            })
 
-            return Response({'redirect_url': paybox_response})
         return Response(serializer.data)
 
 
@@ -471,7 +474,7 @@ class PaymentResult(APIView):
 
 class PaymentResultDetail(generics.RetrieveAPIView):
     """Check order payment status"""
-    serializer_class = serializers.GetPaymentResultSerializer
+    serializer_class = serializers.PaymentResultSerializer
     queryset = models.PaymentItem.objects.all()
     lookup_field = 'pg_order_id'
 
