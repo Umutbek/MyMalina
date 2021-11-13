@@ -91,6 +91,11 @@ class ItemWithQuantity(models.Model):
             self.total=self.item.cost * self.quantity
         super(ItemWithQuantity, self).save()
 
+    class Meta:
+        ordering = ('-id',)
+        verbose_name = "Товар с количеством"
+        verbose_name_plural = "Товары с количеством"
+
 
 class ModelCart(models.Model):
     """Model for cart"""
@@ -110,6 +115,11 @@ class ModelCart(models.Model):
     @property
     def countcart(self):
         return self.listitem.count()
+
+    class Meta:
+        ordering = ('-id',)
+        verbose_name = "Корзина"
+        verbose_name_plural = "Корзины"
 
 
 class RemoveItem(models.Model):
