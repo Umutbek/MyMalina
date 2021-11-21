@@ -273,7 +273,7 @@ class ModelOrder(models.Model):
 
             if device_id:
                 title = "Уведомление о вашем заказе"
-                body = 'Ваш заказ доставлено'
+                body = 'Ваш заказ доставлен'
                 send_notification(device_id, title, body)
 
         elif self.status == 9:

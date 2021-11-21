@@ -136,6 +136,15 @@ class CartViewSet(viewsets.ModelViewSet):
         functions.create_cart(self, serializer)
         return Response(serializer.data)
 
+    def destroy(self, request, *args, **kwargs):
+        cart = self.get_object()
+        print("Cart", cart)
+        for i in cart.listitem.all():
+            print("I", i)
+            i.delete()
+        cart.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class RemoveItem(APIView):
     serializer_class = serializers.RemoveItemNewSerializer

@@ -5,7 +5,7 @@ from django.utils.translation import gettext as _
 from user import models
 from item.models import ModelCart, ModelOrder, Address, \
                         ItemWithQuantity, ItemAdditive, SaveOrderActions, ScoreActions, Report, \
-                        ItemImages
+                        ItemImages, PaymentItem
 
 
 class UserAdmin(BaseUserAdmin):
@@ -38,6 +38,6 @@ admin.site.register(models.RatingStar)
 admin.site.register(SaveOrderActions)
 admin.site.register(ScoreActions)
 admin.site.register(Report)
-
+admin.site.register(PaymentItem)
 admin.site.register(ItemAdditive)
 admin.site.register(ItemImages)
