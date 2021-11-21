@@ -204,8 +204,12 @@ class DeleteCartsView(APIView):
         serializer.is_valid(raise_exception=True)
         client = serializer.validated_data['client']
         usercart = models.ModelCart.objects.filter(clientid=client, visibility=True)
-        if usercart:
+        itemwithcount = models.ItemWithQuantity.objects.filter(user=client, visibility=True)
+
+        if usercart and itemwithcount:
             for i in usercart:
+                i.delete()
+            for i in itemwithcount:
                 i.delete()
             return Response({"detail": "Cart deleted successfully"})
         else:
