@@ -8,10 +8,11 @@ from user.models import Store
 class StoreFilter(FilterSet):
     """Filter for an item"""
     subcategory = filters.CharFilter('subcategory')
+    name = filters.CharFilter('name')
 
     class Meta:
         models = Store
-        fields = ('subcategory',)
+        fields = ('subcategory', 'name')
 
 
 class SubcategoryFilter(FilterSet):
