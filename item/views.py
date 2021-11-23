@@ -543,6 +543,7 @@ class StoreItemView(generics.ListAPIView):
                         parentdict = {
                             "id": i.supplier.id,
                             "supplier": i.supplier.name,
+                            "avatar": i.supplier.avatar,
                             "items": listdict['lst_%i' % i.supplier.id]
                         }
                         parentlist.append(parentdict)
