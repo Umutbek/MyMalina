@@ -325,7 +325,6 @@ class OrderReportView(generics.ListAPIView):
         report = models.ModelOrder.objects.all()
         total = sum(i.cart.totalprice for i in report)
 
-
         if date_from is not None:
             report = models.ModelOrder.objects.filter(date__date__gte=date_from)
             total = sum(i.cart.totalprice for i in report)
@@ -492,6 +491,65 @@ class PaymentResultDetail(generics.RetrieveAPIView):
     lookup_field = 'pg_order_id'
 
 
+class StoreItemView(generics.ListAPIView):
+    """API view to search items and it's store by keyword"""
+    serializer_class = serializers.GetItemSerializer
+    queryset = models.Item.objects.all().order_by('-id')
+    filter_backends = (SearchFilter, OrderingFilter)
+    search_fields = ('name', 'description', 'itemcategory__name')
+
+    def get_queryset(self):
+        """Retrieve the favourite stores for the authenticated user only"""
+
+        item = self.queryset.all().annotate(
+            isfavourite=Count("fav_items",
+                                     filter=Q(fav_items__user=self.request.user.id)))
+        return item
+
+    def list(self, request, *args, **kwargs):
+
+        queryset = self.filter_queryset(self.get_queryset())
+        search = self.request.query_params.get('search')
+
+        parentlist, childlist, checklist = ([] for i in range(3))
+        parentdict, childdict, listdict = ({} for i in range(3))
+
+        if search:
+            for l in queryset:
+                search = search.lower()
+                if search in l.name.lower():
+                    listdict['lst_%i' % l.supplier.id] = []
+
+            for i in queryset:
+                search = search.lower()
+                if search in i.name.lower():
+                    childdict = {
+                        "id": i.id,
+                        "name": i.name,
+                        "cost": i.cost,
+                        "images": str(i.images.all().first())
+                    }
+                    for j in parentlist:
+                        if j['supplier'] in checklist:
+                            pass
+                        else:
+                            checklist.append(j['supplier'])
+
+                    if i.supplier.name in checklist:
+                        listdict['lst_%i' % i.supplier.id].append(childdict)
+
+                    else:
+                        listdict['lst_%i' % i.supplier.id].append(childdict)
+                        parentdict = {
+                            "id": i.supplier.id,
+                            "supplier": i.supplier.name,
+                            "items": listdict['lst_%i' % i.supplier.id]
+                        }
+                        parentlist.append(parentdict)
+
+            return Response(parentlist)
+        else:
+            return Response({"detail": "no searching"})
 
 
 

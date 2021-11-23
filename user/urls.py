@@ -21,7 +21,6 @@ urlpatterns = [
     path('token/refresh/', views.RefreshTokenView.as_view()),
     path('login/', views.LoginAPI.as_view()),
     path('storelogin/', views.LoginAPI.as_view()),
-
     path('storelogin/', views.StoreLoginAPI.as_view()),
     path('getme/', views.GetMeView.as_view()),
     path('changepassword/', views.PasswordChangeView.as_view()),
@@ -30,5 +29,3 @@ urlpatterns = [
     path('getpoints/', views.GetPointsView.as_view()),
     path('storeshare/<int:pk>', views.StoreShareLinkView.as_view(), name='storeshare')
 ]
-
-

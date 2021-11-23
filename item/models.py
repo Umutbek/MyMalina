@@ -39,9 +39,7 @@ class Item(models.Model):
 
     @property
     def salecost(self):
-
         return self.cost - ((self.cost*self.costsale)/100)
-
 
     def get_url(self):
         return reverse('item:items-detail', kwargs={'pk': self.pk})
