@@ -527,6 +527,7 @@ class StoreItemView(generics.ListAPIView):
                         "id": i.id,
                         "name": i.name,
                         "cost": i.cost,
+                        "salecost":i.salecost,
                         "images": str(i.images.all().first())
                     }
                     for j in parentlist:
