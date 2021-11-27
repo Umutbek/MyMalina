@@ -122,7 +122,7 @@ class CartViewSet(viewsets.ModelViewSet):
     pagination_class = None
 
     def get_queryset(self):
-        return self.queryset.filter(visibility=True)
+        return self.queryset.filter(clientid=self.request.user, visibility=True)
 
     def get_serializer_class(self):
         if self.action == 'create':
