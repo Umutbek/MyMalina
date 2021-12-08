@@ -16,10 +16,14 @@ class ArticleViewSet(viewsets.ModelViewSet):
     """Manage article viewset"""
     permission_classes = (permissions.AllowAny,)
     queryset = models.Article.objects.all().order_by('-id')
-    serializer_class = serializers.ArticleSerializer
 
     filter_backends = (DjangoFilterBackend,)
     filter_class = filters.ArticleFilter
+
+    def get_serializer_class(self):
+        if self.action == 'list' or self.action == 'retrieve':
+            return serializers.GetArticleSerializer
+        return serializers.ArticleSerializer
 
 
 class DeleteSeveralArticlesView(APIView):

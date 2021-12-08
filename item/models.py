@@ -288,7 +288,7 @@ class ModelOrder(models.Model):
 class OrderReview(models.Model):
     """Отзывы"""
     star = models.ForeignKey(RatingStar, on_delete=models.CASCADE, verbose_name="звезда")
-    store = models.ForeignKey(Store, on_delete=models.CASCADE, null=True)
+    store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name="rate_store_order", null=True)
     user = models.ForeignKey(RegularAccount, on_delete=models.CASCADE, null=True, related_name="author_review")
     text = models.TextField("Сообщение", max_length=5000)
     date = models.DateTimeField(auto_now_add=True, null=True)

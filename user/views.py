@@ -33,16 +33,13 @@ class StoreViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         """Check is store selected as favourite or not"""
-        item = self.queryset.all().annotate(
+        store = self.queryset.all().annotate(
             isfavouritestore=Count("fav_store",
                                      filter=Q(fav_store__client=self.request.user.id))
         ).annotate(
-            is_rated=Count("ratings",
-                                     filter=Q(ratings__user=self.request.user.id))
-        ).annotate(
-            rating=Sum(F('ratings__star')) / Count(F('ratings'))
+            rating=Sum(F('rate_store_order__star')) / Count(F('rate_store_order'))
         )
-        return item
+        return store
 
 
     def get_serializer_class(self):

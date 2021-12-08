@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers, exceptions
 from feed import models, utils
+from item.serializers import MyStore
 
 
 class ArticleImagesSerializer(serializers.ModelSerializer):
@@ -102,6 +103,16 @@ class ArticleSerializer(serializers.ModelSerializer):
                     articleimage.append(c.id)
 
         return instance
+
+
+class GetArticleSerializer(serializers.ModelSerializer):
+    """Serializer article"""
+    images = ArticleImagesSerializer(many=True, required=False, allow_null=True)
+    store = MyStore()
+
+    class Meta:
+        model = models.Article
+        fields = ('id', 'title', 'subtitle', 'text', 'images', 'date', 'type', 'store')
 
 
 class DeleteSeveralArticlesSerializer(serializers.Serializer):

@@ -72,14 +72,13 @@ class StoreSerializer(UserSerializer):
 class GetStoreSerializer(UserSerializer):
 
     isfavouritestore = serializers.BooleanField()
-    is_rated = serializers.BooleanField()
     rating = serializers.IntegerField()
 
     class Meta:
         model = models.Store
         fields = ('id', 'name','login', 'phone', 'email', 'avatar', 'type', 'password',
                   'percentage', 'storeaddress', 'worktime', 'telegram', 'deliverycost', 'avgcheck',
-                  'instagram', 'whatsapp', 'slogan', 'description', 'is_rated', 'rating',
+                  'instagram', 'whatsapp', 'slogan', 'description', 'rating',
                   'category', 'isfavouritestore', 'subcategory', 'is_staff')
 
         read_only_field = ('id',)
