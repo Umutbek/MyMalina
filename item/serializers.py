@@ -380,7 +380,7 @@ class ClientOrderSerializer(serializers.ModelSerializer):
         fields = (
             'id', 'clientId', 'storeId', 'paymentType', 'paymentStatus', 'ordertype', 'totalprice',
             'timedelivery', 'scorepaid', 'scoregot', 'address', 'declinereason', 'status',
-            'quantityappliances', 'scancode', 'comment', 'date', 'cart'
+            'quantityappliances', 'scancode', 'comment', 'date', 'cart', 'orderdelivery_cost'
         )
         read_only_fields = ('id',)
 
@@ -406,7 +406,7 @@ class GetClientOrderSerializer(serializers.ModelSerializer):
         fields = (
             'id', 'clientId', 'storeId', 'paymentType', 'paymentStatus', 'status',
             'timedelivery', 'scorepaid', 'scoregot', 'address', 'ordertype', 'totalprice', 'totalcount', 'is_rated',
-            'quantityappliances', 'scancode', 'comment', 'date', 'cart', 'declinereason', 'refusereason'
+            'quantityappliances', 'scancode', 'comment', 'date', 'cart', 'declinereason', 'refusereason', 'orderdelivery_cost'
         )
         read_only_fields = ('id',)
 

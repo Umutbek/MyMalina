@@ -155,7 +155,7 @@ class ModelOrder(models.Model):
     count = models.IntegerField(default=0)
     declinereason = models.CharField(max_length=200, null=True, blank=True)
     refusereason = models.CharField(max_length=200, null=True, blank=True)
-
+    orderdelivery_cost = models.IntegerField(default=0)
     scorepaid = models.IntegerField(default=0)
     scoregot = models.IntegerField(default=0)
     address = models.JSONField(null=True, blank=True)
@@ -235,8 +235,10 @@ class ModelOrder(models.Model):
                 send_notification(device_id,title,body)
 
         elif self.status == 6:
-            firestore.db.collection(u'stores').document(str(self.storeId.id)).collection(u'orders').document(str(self.id)).update({"status": 6})
-            score = ((self.totalprice - self.storeId.deliverycost - self.scorepaid) * self.storeId.percentage)/100
+            print(self.clientId.score)
+            # firestore.db.collection(u'stores').document(str(self.storeId.id)).collection(u'orders').document(str(self.id)).update({"status": 6})
+            score = ((self.totalprice - self.orderdelivery_cost - self.scorepaid) * self.storeId.percentage)/100
+
             if self.scoregot<=0:
                 self.clientId.score = self.clientId.score + score
                 self.clientId.save()
@@ -260,7 +262,7 @@ class ModelOrder(models.Model):
 
         elif self.status == 8:
             firestore.db.collection(u'stores').document(str(self.storeId.id)).collection(u'orders').document(str(self.id)).update({"status": 8})
-            score = ((self.totalprice - self.storeId.deliverycost - self.scorepaid) * self.storeId.percentage)/100
+            score = ((self.totalprice - self.orderdelivery_cost - self.scorepaid) * self.storeId.percentage)/100
             if self.scoregot<=0:
                 self.clientId.score = self.clientId.score + score
                 self.clientId.save()

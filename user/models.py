@@ -80,7 +80,7 @@ class RegularAccount(User):
     surname = models.CharField(max_length=200, null=True, blank=True)
     datebirth = models.DateField(null=True, blank=True, verbose_name="День рождение")
     gender = FSMIntegerField(choices=utils.UserGender.choices, default=utils.UserGender.NotIndicated, verbose_name="Пол")
-    score = models.IntegerField(default=0, verbose_name="Баллы")
+    score = models.PositiveIntegerField(default=0, verbose_name="Баллы")
     device_id = models.CharField(max_length=500, null=True, blank=True)
 
     class Meta:

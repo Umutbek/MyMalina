@@ -238,6 +238,13 @@ class ClientOrderViewSet(viewsets.ModelViewSet):
         serializer = serializers.ClientOrderSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         saved_data = serializer.save()
+
+        saved_data.orderdelivery_cost = saved_data.storeId.deliverycost
+
+        if saved_data.scorepaid > saved_data.clientId.score:
+            saved_data.delete()
+            return Response({"detail": "Not enough score"})
+
         functions.create_order_in_firebase(saved_data, self.request.user.name)
         if saved_data.paymentType == 2:
             if saved_data.comment:
@@ -251,6 +258,7 @@ class ClientOrderViewSet(viewsets.ModelViewSet):
                 'order_id': paybox_response['pg_order_id']
             })
 
+        saved_data.save()
         return Response(serializer.data)
 
 
